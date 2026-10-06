@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caça Vaga</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Cadastre-se e nós enviamos seu currículo</h2>
+        
+        <form action="/processar" method="POST">
+            
+            <!-- SEÇÃO 1: Dados de Busca e Preferências -->
+            <fieldset>
+                <legend>Informe seus dados e preferências</legend>
+                
+                <div class="form-group">
+                    <label for="nome">Qual seu nome completo?</label>
+                    <input type="text" id="nome" name="dados_pessoais[nome_completo]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vaga">Para qual vaga deseja se candidatar?</label>
+                    <input type="text" id="vaga" name="vaga_interesse" placeholder="Ex: Desenvolvedor Python" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="dados_pessoais[email]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="tel" id="telefone" name="dados_pessoais[telefone]" placeholder="+55 11 99999-9999" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cidade">Cidade:</label>
+                        <input type="text" id="cidade" name="dados_pessoais[localizacao][cidade]" placeholder="Ex: São Paulo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estado">Estado (UF):</label>
+                        <select id="estado" name="dados_pessoais[localizacao][estado]" required>
+                            <option value="">Selecione...</option>
+                            <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                            <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                            <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                            <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                            <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                            <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                            <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                            <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                            <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="linkedin">Link do LinkedIn:</label>
+                        <input type="url" id="linkedin" name="dados_pessoais[links][linkedin]">
+                    </div>
+                    <div class="form-group">
+                        <label for="github">GitHub / Portfólio:</label>
+                        <input type="url" id="github" name="dados_pessoais[links][portfolio_github]">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="min_salario">Pretensão salarial (R$):</label>
+                        <input type="number" id="min_salario" name="preferencias_de_carreira[pretensao_salarial]" placeholder="Ex: 2000">
+                    </div>
+                    <div class="form-group">
+                        <label for="regime_contratacao">Algum modelo de regime de preferencia:</label>
+                        <select id="regime_contratacao" name="preferencias_de_carreira[regime_contratacao]" required>
+                            <option value="">Selecione...</option>
+                            <option value="presencial">Presencial</option><option value="remoto">Remoto</option><option value="hibrido">Hibrido</option>
+                            <option value="temporaria">Temporario</option><option value="freelancer">Freelancer</option><option value="todos">Todos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="data">Vagas publicadas nos últimos (dias):</label>
+                        <input type="number" id="data" name="busca_dias_passados" value="7">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="obs_usu">Alguma observação essencial? (Stack favorita, modalidade, etc.):</label>
+                    <textarea id="obs_usu" name="observacoes_busca" rows="3" placeholder="Ex: Prefiro modelo remoto ou híbrido em São Paulo..."></textarea>
+                </div>
+            </fieldset>
+
+            <!-- SEÇÃO 2: Perfil Profissional -->
+            <fieldset>
+                <legend>Currículo - Resumo e Competências</legend>
+
+                <div class="form-group">
+                    <label for="nivel_formacao">Qual sua formação academica?</label>
+                    <select id="nivel_formacao" name="formacao[nivel]" required>
+                            <option value="">Selecione...</option>
+                            <option value="medio_completo">Ensino medio completo</option><option value="medio_incompleto">Ensino medio incompleto</option><option value="superior_completo">Ensino superior completo</option><option value="superior_incompleto">Ensino superior incompleto</option>
+                        </select>
+                    </div>
+                <div class="form-group">
+                    <label for="instituicao">Qual a instituição da ultima formação?</label>
+                    <input type="text" id="instituicao" name="formacao[instituicao]" required placeholder="Unifecaf">
+                </div>
+                <div class="form-group">
+                    <label for="form_acade_area">Para superior, qual a area de formação</label>
+                    <input type="text" id="nome" name="formacao[form_area]" placeholder="Analise e desenvolvimento de sistema, Ciencia da computação, Contabilidade, Engenheiro, Administração">
+                </div>
+
+                <div class="form-group">
+                    <label for="resumo">Resumo Profissional:</label>
+                    <textarea id="resumo" name="resumo_profissional" rows="4" placeholder="Breve resumo de qualificações, anos de experiência e principais conquistas de carreira."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hard_skills">Competências Técnicas (Hard Skills):</label>
+                        <input type="text" id="hard_skills" name="competencias[hard_skills]" placeholder="Ex: Python, SQL, HTML (separadas por vírgula)">
+                    </div>
+                    <div class="form-group">
+                        <label for="soft_skills">Competências Comportamentais (Soft Skills):</label>
+                        <input type="text" id="soft_skills" name="competencias[soft_skills]" placeholder="Ex: Trabalho em equipe, Liderança">
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="btn-enviar">Ir para fase 2</button>
+        </form>
+    </div>
+
+</body>
+</html>

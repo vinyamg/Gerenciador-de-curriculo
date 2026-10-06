@@ -1,0 +1,119 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #082e79; 
+    color: #1f2337;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* 2. CARD PRINCIPAL (SIMULANDO TELA DE APP) */
+.container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 650px; /* Largura ideal  */
+    padding: 30px 25px;
+    border-radius: 16px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Sombra suave */
+}
+
+/* Ttulo*/
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 28px;
+    border-block-end: 3px solid #060812;
+}
+
+/* 3. SEÇÕES DO FORMULÁRIO */
+fieldset {
+    border: none; 
+    margin-bottom: 24px;
+    padding: 0;
+}
+
+legend {
+    font-size: 16px;
+    font-weight: 650;
+    color: #4f46e5; 
+    margin-bottom: 16px;
+    padding: 0;
+}
+
+/* 4. CAMPOS DE INPUTS */
+.form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 6px;
+}
+
+.form-group input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px; /* Cantos dos inputs suaves */
+    background-color: #f9fafb;
+    color: #111827;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+
+/* Efeito ao clicar no campo */
+.form-group input:focus {
+    border-color: #4f46e5;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+/* Estilização dos placeholders (textos de exemplo dentro do input) */
+::placeholder {
+    color: #000000;
+    opacity: 0.35;
+}
+
+/* 6. BOTÃO DE AÇÃO PRINCIPAL */
+.btn-enviar {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #4f46e5; /* Mesmo roxo dos blocos */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+
+.btn-enviar:hover {
+    background-color: #1e1a61;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+    transform: translateY(-2px); /* Leve efeito de flutuação ao passar o mouse */
+}
+
+.btn-enviar:active {
+    transform: translateY(2px);
+}

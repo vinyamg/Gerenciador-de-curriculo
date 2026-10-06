@@ -1,0 +1,43 @@
+{
+    "dados_pessoais": {
+        "nome_completo": "adrian carlos de macedo",
+        "email": "email@email",
+        "telefone": "119999999",
+        "localizacao": {
+            "cidade": "sao paulo",
+            "estado": "SP",
+            "pais": "Brasil"
+        },
+        "links": {
+            "linkedin": "https://www.linkedin.com/",
+            "portfolio_github": "https://www.github.com/"
+        }
+    },
+    "resumo_profissional": "trabalhei disso e daquilo assim assim e assado com ferramentas x y e z demostrei proatividade e desenvolvimento",
+    "experiencia_profissional": [],
+    "formacao_academica": {
+        "nivel_formacao": "superior_incompleto",
+        "instituicao_formacao": "unifecaf",
+        "area_formacao": "analise e desenvolvimento de sistemas"
+    },
+    "competencias": {
+        "hard_skills": [
+            "Python",
+            "sql",
+            "c",
+            "aqui é separado por virgulas para criar uma lista"
+        ],
+        "soft_skills": [
+            "comunicativo",
+            "liderança",
+            "aqui tbm"
+        ],
+        "observacoes": "man obs no geral prefiro python estou estudando c desenrolo no front essas paradas"
+    },
+    "preferencias_de_carreira": {
+        "regime_contratacao": "todos",
+        "pretensao_salarial": 0.0,
+        "vaga": "backend junior",
+        "vagas_publicadas_nos_ultimos_dias": 365
+    }
+}
