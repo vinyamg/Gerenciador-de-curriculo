@@ -8,7 +8,8 @@ Para rodar o web corretamente, inicie esse .py e coloque na porta local :5000
 from flask import Flask, render_template, request, jsonify
 import unicodedata, re, json, os
 
-app = Flask(__name__)
+#config dos caminhos
+app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
