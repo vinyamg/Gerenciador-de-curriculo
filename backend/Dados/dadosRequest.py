@@ -1,17 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
-
+from curl_cffi import requests
 class gupy:
     @staticmethod
     def vagas(
-        termo,
-        tipo, #remote ex
-        quantidade,
+        termo: str,
+        tipo: str, #remote ex
+        quantidade: int,
         cidade=None,
         estado=None,
         ordenar_por=None,
         ordem=None
-    ):
+    ) -> dict:
         headers = {
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -160,3 +160,75 @@ class gupy:
                 requisitos.append(texto)
 
         return requisitos
+
+class gitHubVagas:
+
+    @staticmethod
+    def vagas(
+            termo: str,
+            quantidade: int = 10,
+            pagina: int = 1,
+            incluir_corpo: bool = True,
+            idioma: str | None = None,
+            timeout: int = 30,
+            **outros_parametros,
+    ) -> list[dict]:
+
+        url = "https://apibr.com/vagas/api/v2/issues"
+
+        params = {
+            "page": pagina,
+            "per_page": quantidade,
+            "term": termo,
+            "includeBody": str(incluir_corpo).lower(),
+            **outros_parametros,
+        }
+
+        if idioma:
+            params["lang"] = idioma
+
+        try:
+            resposta = requests.get(
+                url,
+                params=params,
+                headers={"Accept": "application/json"},
+                impersonate="chrome",
+                timeout=timeout,
+            )
+            resposta.raise_for_status()
+            dados = resposta.json()
+
+        except Exception as erro:
+            raise RuntimeError(f"Falha ao consultar a API: {erro}") from erro
+
+        if isinstance(dados, list):
+            vagas = dados
+        elif isinstance(dados, dict):
+            vagas = (
+                    dados.get("issues")
+                    or dados.get("items")
+                    or dados.get("data")
+                    or []
+            )
+        else:
+            raise RuntimeError("Formato inesperado na resposta.")
+
+        if not isinstance(vagas, list):
+            raise RuntimeError("A API não retornou uma lista de vagas.")
+
+        # Preserva os campos úteis disponíveis na resposta.
+        resultado = []
+
+        for vaga in vagas:
+            if not isinstance(vaga, dict):
+                continue
+
+            resultado.append({
+                "titulo": vaga.get("title", ""),
+                "descricao": vaga.get("body", vaga.get("description", "")),
+                "link": vaga.get("html_url", vaga.get("url", "")),
+                "empresa": vaga.get("repository_name", ""),
+                "data_publicacao": vaga.get("created_at", ""),
+            })
+
+        return resultado
