@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block titulo %}Criar conta — Caça Vaga{% endblock %}
+{% block conteudo %}
+<form id="form-cadastro" novalidate>
+    <h2>Criar Conta</h2>
+    <div id="caixa-erro" class="caixa-erro" role="alert" hidden></div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <div class="form-group">
+        <label for="nome">Nome Completo:</label>
+        <input type="text" id="nome" name="nome" maxlength="120" autocomplete="name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" maxlength="120" autocomplete="email" required>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="senha">Senha (mín. 8 caracteres):</label>
+            <input type="password" id="senha" name="senha" minlength="8" autocomplete="new-password" required>
+        </div>
+        <div class="form-group">
+            <label for="senha2">Confirmar senha:</label>
+            <input type="password" id="senha2" name="senha2" autocomplete="new-password" required>
+        </div>
+    </div>
+
+    <button type="submit" class="btn-enviar">Cadastrar</button>
+    <p class="link-alternativo">Já tem conta?
+        <a href="{{ url_for('pagina_login') }}">Entre aqui</a></p>
+</form>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/cadastro.js') }}"></script>
+{% endblock %}

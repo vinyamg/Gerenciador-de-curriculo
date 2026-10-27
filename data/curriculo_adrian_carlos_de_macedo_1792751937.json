@@ -1,0 +1,38 @@
+{
+    "dados_pessoais": {
+        "nome_completo": "adrian carlos de macedo",
+        "email": "test@email.com",
+        "telefone": "11999999999",
+        "localizacao": {
+            "cidade": "campinas",
+            "estado": "RR",
+            "pais": "Brasil"
+        },
+        "links": {
+            "linkedin": "https://www.reportlab.com/",
+            "portfolio_github": "https://www.reportlab.com/"
+        }
+    },
+    "resumo_profissional": "teste resumo proficional",
+    "formacao_academica": {
+        "nivel_formacao": "superior_incompleto",
+        "instituicao_formacao": "unifecaf test formacao",
+        "area_formacao": "ads"
+    },
+    "competencias": {
+        "hard_skills": [
+            "teste hard skill",
+            "python"
+        ],
+        "soft_skills": [
+            "test soft skill"
+        ],
+        "observacoes": "teste obs"
+    },
+    "preferencias_de_carreira": {
+        "regime_contratacao": "todos",
+        "pretensao_salarial": 20000.0,
+        "vaga": "dev junior backend",
+        "vagas_publicadas_nos_ultimos_dias": 7
+    }
+}

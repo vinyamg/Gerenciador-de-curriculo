@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block titulo %}Inscrição — Caça Vaga{% endblock %}
+{% block conteudo %}
+<div id="caixa-erro" class="caixa-erro" role="alert" hidden></div>
+
+<section id="tela-sucesso" class="tela-sucesso" hidden>
+     <div class="icone-sucesso">✓</div>
+     <h3>Inscrição concluída!</h3>
+     <p id="msg-sucesso">Seu currículo foi salvo com segurança.</p>
+     <p class="proximo-passo">Próximo passo: <strong>Fase 2</strong> — busca e envio de vagas.</p>
+     <button type="button" id="btn-novo-cadastro" class="btn-secundario">Novo cadastro</button>
+</section>
+
+
+<form id="form-candidato" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <!-- SEÇÃO 1: Dados de Busca e Preferências -->
+            <fieldset>
+                <legend>1. Seus dados e preferências</legend>
+
+                <div class="form-group">
+                    <label for="nome">Qual seu nome completo?</label>
+                    <input type="text" id="nome" name="dados_pessoais[nome_completo]"
+                           maxlength="120" autocomplete="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vaga">Para qual vaga deseja se candidatar?</label>
+                    <input type="text" id="vaga" name="vaga_interesse"
+                           maxlength="80" placeholder="Ex: Desenvolvedor Python" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="dados_pessoais[email]"
+                               maxlength="120" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="tel" id="telefone" name="dados_pessoais[telefone]"
+                               maxlength="20" inputmode="tel" autocomplete="tel"
+                               pattern="[0-9\s()+\-]{8,20}"
+                               placeholder="+55 11 99999-9999" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cidade">Cidade:</label>
+                        <input type="text" id="cidade" name="dados_pessoais[localizacao][cidade]"
+                               maxlength="60" autocomplete="address-level2"
+                               placeholder="Ex: São Paulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado (UF):</label>
+                        <select id="estado" name="dados_pessoais[localizacao][estado]" required>
+                            <option value="">Selecione...</option>
+                            <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                            <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                            <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                            <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                            <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                            <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                            <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                            <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                            <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="linkedin">Link do LinkedIn:</label>
+                        <input type="url" id="linkedin" name="dados_pessoais[links][linkedin]"
+                               maxlength="200" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="github">GitHub / Portfólio:</label>
+                        <input type="url" id="github" name="dados_pessoais[links][portfolio_github]"
+                               maxlength="200" placeholder="https://github.com/...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="min_salario">Pretensão salarial (R$):</label>
+                        <input type="number" id="min_salario" name="preferencias_de_carreira[pretensao_salarial]"
+                               min="0" max="1000000" step="50" placeholder="Ex: 2000">
+                    </div>
+                    <div class="form-group">
+                        <label for="regime_contratacao">Modelo de regime de preferência:</label>
+                        <select id="regime_contratacao" name="preferencias_de_carreira[regime_contratacao]" required>
+                            <option value="">Selecione...</option>
+                            <option value="presencial">Presencial</option>
+                            <option value="remoto">Remoto</option>
+                            <option value="hibrido">Híbrido</option>
+                            <option value="temporaria">Temporário</option>
+                            <option value="freelancer">Freelancer</option>
+                            <option value="todos">Todos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Vagas publicadas nos últimos (dias):</label>
+                        <input type="number" id="data" name="busca_dias_passados" value="7" min="1" max="365">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="obs_usu">Alguma observação essencial? (máx. 300 caracteres)</label>
+                    <textarea id="obs_usu" name="observacoes_busca" rows="3" maxlength="300"
+                              placeholder="Ex: Prefiro modelo remoto ou híbrido em São Paulo..."></textarea>
+                </div>
+            </fieldset>
+
+            <!-- SEÇÃO 2: Perfil Profissional -->
+            <fieldset>
+                <legend>2. Currículo — resumo e competências</legend>
+
+                <div class="form-group">
+                    <label for="nivel_formacao">Qual sua formação acadêmica?</label>
+                    <select id="nivel_formacao" name="formacao[nivel]" required>
+                        <option value="">Selecione...</option>
+                        <option value="medio_completo">Ensino médio completo</option>
+                        <option value="medio_incompleto">Ensino médio incompleto</option>
+                        <option value="superior_completo">Ensino superior completo</option>
+                        <option value="superior_incompleto">Ensino superior incompleto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="instituicao">Qual a instituição da última formação?</label>
+                    <input type="text" id="instituicao" name="formacao[instituicao]"
+                           maxlength="100" placeholder="Unifecaf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="area_formacao">Para superior, qual a área de formação?</label>
+                    <input type="text" id="area_formacao" name="formacao[form_area]"
+                           maxlength="100"
+                           placeholder="Análise e desenvolvimento de sistemas, Ciência da computação, Contabilidade...">
+                </div>
+
+                <div class="form-group">
+                    <label for="resumo">Resumo Profissional: (máx. 600 caracteres)</label>
+                    <textarea id="resumo" name="resumo_profissional" rows="4" maxlength="600"
+                              placeholder="Breve resumo de qualificações, anos de experiência e principais conquistas de carreira."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hard_skills">Competências Técnicas (Hard Skills):</label>
+                        <input type="text" id="hard_skills" name="competencias[hard_skills]"
+                               maxlength="200" placeholder="Ex: Python, SQL, HTML (separadas por vírgula)">
+                    </div>
+                    <div class="form-group">
+                        <label for="soft_skills">Competências Comportamentais (Soft Skills):</label>
+                        <input type="text" id="soft_skills" name="competencias[soft_skills]"
+                               maxlength="200" placeholder="Ex: Trabalho em equipe, Liderança">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- SEÇÃO 3: Segurança e consentimento (LGPD) -->
+            <fieldset>
+                <legend>3. Segurança e privacidade</legend>
+
+                <label class="chk-lgpd">
+                    <input type="checkbox" id="consentimento_lgpd" name="consentimento_lgpd" required>
+                    <span>Autorizo o uso dos meus dados para a busca de vagas, conforme a
+                          <strong>LGPD (Lei 13.709/2018)</strong>. Posso solicitar a exclusão a qualquer momento.</span>
+                </label>
+
+                <p class="nota-seguranca">
+                    🔒 Seus dados passam por validação em múltiplas camadas e ficam armazenados
+                    apenas localmente.
+                </p>
+            </fieldset>
+
+    <button type="submit" class="btn-enviar">Ir para fase 2</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/inscricao.js') }}"></script>
+{% endblock %}

@@ -4,8 +4,39 @@ from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
+import json, os, sys
 
 
+def carregar_dados_candidato():
+    """
+    Localiza a pasta data na raiz do projeto subindo os níveis necessários
+    e carrega o arquivo de inscrição correto.
+    """
+    # 1. Caminho absoluto de onde o 'curriculo.py' está:
+    # -> c:\Users\adria\Desktop\Estudos\Adrian\Faculdade\git\Gerenciador_de_curriculo_teste\backend\Curriculo
+    diretorio_script = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Sobe duas pastas para chegar na raiz do projeto:
+    # -> Sobe 1 (backend) e Sobe 2 (Gerenciador_de_curriculo_teste)
+    raiz_projeto = os.path.abspath(os.path.join(diretorio_script, "..", ".."))
+    
+    # 3. Aponta para a pasta 'data' correta na raiz e localiza o arquivo do candidato
+    pasta_data = os.path.join(raiz_projeto, 'data')
+    caminho_json = os.path.join(pasta_data, 'inscricao_adriancarlos.json')
+
+    # Validação de segurança
+    if not os.path.exists(caminho_json):
+        print(f"\nErro Crítico: O arquivo não foi encontrado.", file=sys.stderr)
+        print(f"Caminho tentado: {caminho_json}\n", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        with open(caminho_json, 'r', encoding='utf-8') as arquivo:
+            return json.load(arquivo)
+    except json.JSONDecodeError:
+        print("Erro Crítico: O arquivo JSON está corrompido ou mal formatado.", file=sys.stderr)
+        sys.exit(1)
+        
 def criarCurriculo(
     candidato,
     perfil,
@@ -377,109 +408,66 @@ def criarCurriculo(
 # ==========================================
 
 if __name__ == "__main__":
+    # Carrega os dados do JSON dinamicamente
+    dados = carregar_dados_candidato()
 
+    # Tratamento seguro usando .get() para evitar quebras por chaves ausentes
+    dados_pessoais = dados.get("dados_pessoais", {})
+    localizacao = dados_pessoais.get("localizacao", {})
+    links = dados_pessoais.get("links", {})
+    preferencias = dados.get("preferencias_de_carreira", {})
+    formacao = dados.get("formacao", {})
+    competencias = dados.get("competencias", {})
+
+    # ==========================================
+    # MAPEAMENTO DINÂMICO
+    # ==========================================
+    
     candidato = {
-        "nome": "joao teste",
-        "cargo": "Pentest junior",
-        "telefone": "(11) 99999-9999",
-        "email": "joao@email.com",
-        "localizacao": "São Paulo - SP",
-        "sites": ["https://github.com/teste"]
+        "nome": dados_pessoais.get("nome_completo", "Não informado"),
+        "cargo": dados.get("vaga_interesse", "Não informado"),
+        "telefone": dados_pessoais.get("telefone", "Não informado"),
+        "email": dados_pessoais.get("email", "Não informado"),
+        "localizacao": f"{localizacao.get('cidade', 'Não informada')} - {localizacao.get('estado', '')}",
+        "sites": [
+            links.get("linkedin", ""),
+            links.get("portfolio_github", "")
+        ]
     }
 
-    perfil = (
-        "Profissional organizado, responsável e comprometido, "
-        "com experiência em pentest, pesquisa e appsec "
-        "Com conhecimentos em engenharia reversa, web e embarcados"
-    )
+    perfil = dados.get("resumo_profissional", "")
 
     experiencias = [
-        {
-            "cargo": "Assistente Administrativo",
-            "empresa": "Empresa ABC",
-            "periodo": "2023 - 2026",
-            "descricao": (
-                "Atendimento ao cliente, organização de documentos, "
-                "elaboração de relatórios e suporte às atividades administrativas."
-            )
-        },
-        {
-            "cargo": "Auxiliar Administrativo",
-            "empresa": "Empresa XYZ",
-            "periodo": "2021 - 2023",
-            "descricao": (
-                "Controle de documentos, atendimento telefônico "
-                "e apoio às rotinas administrativas."
-            )
-        }
+        # O formulário web atual não coletou experiências cronológicas ainda.
     ]
 
     formacoes = [
         {
-            "curso": "Cibersegurança",
-            "instituicao": "Faculdade x",
-            "periodo": "2024 - 2025"
-        },
-        {
-            "curso": "Ensino Médio",
-            "instituicao": "Escola Estadual Exemplo",
-            "periodo": "2019 - 2026"
+            "curso": formacao.get("form_area", "Não informado"),
+            "instituicao": formacao.get("instituicao", "Não informada"),
+            "periodo": formacao.get("nivel", "Não informado")  # Nível de formação atual
         }
     ]
 
-    # Template de projeto: titulo, objetivo, descricao e tecnologias (lista).
     projetos = [
-        {
-            "titulo": "Análise de Firmware de Dispositivo IoT",
-            "objetivo": (
-                "Identificar vulnerabilidades de segurança em firmware embarcado "
-                "de um roteador doméstico."
-            ),
-            "descricao": (
-                "Extração e engenharia reversa do firmware, mapeamento de "
-                "binários e identificação de falhas de autenticação e "
-                "armazenamento inseguro de credenciais."
-            ),
-            "tecnologias": ["Ghidra", "Binwalk", "QEMU", "Python"]
-        },
-        {
-            "titulo": "Teste de Intrusão em Aplicação Web",
-            "objetivo": (
-                "Avaliar a segurança de uma aplicação web corporativa "
-                "simulando ataques externos."
-            ),
-            "descricao": (
-                "Levantamento de vulnerabilidades como injeção de SQL, XSS "
-                "e falhas de controle de acesso, com relatório técnico "
-                "detalhado das descobertas e recomendações de correção."
-            ),
-            "tecnologias": ["Burp Suite", "SQLMap", "Nmap", "OWASP ZAP"]
-        }
+        # O formulário web não possui mapeamento para projetos nesta fase.
     ]
 
     conhecimentos_tecnicos = {
-        "Programação": [
-            "Python",
-            "SQL",
-            "JavaScript"
-        ],
-        "Ferramentas e Softwares": [
-            "Excel Avançado",
-            "Word",
-            "Power BI"
-        ],
-        "Habilidades Gerais": [
-            "Organização",
-            "Atendimento ao cliente",
-            "Trabalho em equipe",
-            "Comunicação"
-        ],
-        "Pesquisa": [
-            "Assembly",
-            "GHidra",
-            "JavaScript"
+        # Divide as strings separadas por vírgula em listas limpas usando list comprehension
+        "Hard Skills": [skill.strip() for skill in competencias.get("hard_skills", "").split(",") if skill.strip()],
+        "Soft Skills": [skill.strip() for skill in competencias.get("soft_skills", "").split(",") if skill.strip()],
+        "Preferências de Carreira": [
+            f"Pretensão Salarial: R$ {preferencias.get('pretensao_salarial', 'Não informada')}",
+            f"Regime de Contratação: {preferencias.get('regime_contratacao', 'Não informado')}",
+            f"Observações de Busca: {dados.get('observacoes_busca', 'Nenhuma')}"
         ]
     }
+
+    # ==========================================
+    # Exemplo de saída / validação interna
+    # ==========================================
+    print(f"Perfil de {candidato['nome']} carregado com sucesso para a vaga de {candidato['cargo']}.")
 
     criarCurriculo(
         candidato,
